@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="balloon" default="help"> 
+    <property name="root.dir" value=".." />
+    <!-- The local.properties file is created and updated by the 'android' tool.
+         It contains the path to the SDK. It should *NOT* be checked into
+         Version Control Systems. -->
+    <property file="local.properties" />
+
+    <!-- The ant.properties file can be created by you. It is only edited by the
+         'android' tool to add properties to it.
+         This is the place to change some Ant specific build properties.
+         Here are some properties you may want to change/update:
+
+         source.dir
+             The name of the source directory. Default is 'src'.
+         out.dir
+             The name of the output directory. Default is 'bin'.
+
+         For other overridable properties, look at the beginning of the rules
+         files in the SDK, at tools/ant/build.xml
+
+         Properties related to the SDK location or the project target should
+         be updated using the 'android' tool with the 'update' action.
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems.
+
+         -->
+    <property file="ant.properties" />
+
+    <!-- The project.properties file is created and updated by the 'android'
+         tool, as well as ADT.
+
+         This contains project specific properties such as project target, and library
+         dependencies. Lower level build properties are stored in ant.properties
+         (or in .classpath for Eclipse projects).
+
+         This file is an integral part of the build system for your
+         application and should be checked into Version Control Systems. -->
+    <loadproperties srcFile="project.properties" />
+
+    <!-- quick check on sdk.dir -->
+    <fail
+            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through an env var"
+            unless="sdk.dir"
+    />
+
+    <!-- version-tag: custom -->
+    <target name="-pre-build">
+        <copy todir="libs" verbose="${verbose}">
+            <fileset dir="${root.dir}/core-am/libs" includes="gdx.jar" />
+        </copy>
+    </target>
+    
+    <target name="-aidl-gen">
+		<echo level="info">Handling core-common aidl files</echo>
+            <mkdir dir="${core-common.dir}/gen"/>
+			<aidl executable="${aidl}"
+                    framework="${project.target.framework.aidl}"
+                    libraryBinAidlFolderPathRefid="project.library.bin.aidl.folder.path"
+                    genFolder="${core-common.dir}/gen"
+                    aidlOutFolder="${core-common.dir}/bin/aidl">
+                <source path="${core-common.dir}/src/"/>
+            </aidl>
+ </target>
+
+    <!-- Compiles this project's .java files into .class files. -->
+    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile, -aidl-gen">
+    	 <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+            <!-- If android rules are used for a test project, its classpath should include
+                 tested project's location -->
+            <condition property="extensible.classpath"
+                    value="${tested.project.absolute.dir}/bin/classes"
+                    else=".">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+            <condition property="extensible.libs.classpath"
+                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
+                    else="${jar.libs.dir}">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+            <path id="project.javac.classpath">
+                    <path refid="project.all.jars.path" />
+                    <path refid="tested.project.classpath" />
+            </path>
+            <javac encoding="${java.encoding}"
+                    source="${java.source}" target="${java.target}"
+                    debug="true" extdirs="" includeantruntime="false"
+                    destdir="${out.classes.absolute.dir}"
+                    verbose="${verbose}"
+                    classpath="${extensible.classpath}"
+                    bootclasspathref="project.target.class.path"
+					classpathref="project.javac.classpath">
+                <src path="${source.absolute.dir}" />
+                <src path="${gen.absolute.dir}" />
+                <src path="${root.dir}/main" />
+                <classpath>
+                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+                </classpath>
+                <compilerarg line="${java.compilerargs}" />
+                
+            </javac>
+            <!-- if the project is a library then we generate a jar file -->
+            <if condition="${project.is.library}">
+                <then>
+                    <echo>Creating library output jar file...</echo>
+                    <property name="out.library.jar.file" location="${out.absolute.dir}/classes.jar" />
+                    <if>
+                        <condition>
+                            <length string="${android.package.excludes}" trim="true" when="greater" length="0" />
+                        </condition>
+                        <then>
+                            <echo>Custom jar packaging exclusion: ${android.package.excludes}</echo>
+                        </then>
+                    </if>
+                    <jar destfile="${out.library.jar.file}">
+                        <fileset dir="${out.classes.absolute.dir}" excludes="**/R.class **/R$*.class"/>
+                        <fileset dir="${source.absolute.dir}" excludes="**/*.java ${android.package.excludes}" />
+                    </jar>
+                </then>
+            </if>
+
+            <!-- if the project is instrumented, intrument the classes -->
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo>Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr verbosity="${verbosity}"
+                               mode="overwrite"
+                               instrpath="${out.absolute.dir}/classes"
+                               outdir="${out.absolute.dir}/classes">
+                        </instr>
+                        <!-- TODO: exclusion filters on R*.class and allowing custom exclusion from
+                             user defined file -->
+                    </emma>
+                </then>
+            </if>
+        </do-only-if-manifest-hasCode>
+    </target>
+
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+
+</project>
