@@ -44,10 +44,10 @@ public class BalloonGame extends Game implements InputProcessor, IClickListener,
 			gameStage.clear();
 		}
 		//Load Font
-		bigFont = new BitmapFont(Gdx.files.internal("res/fonts/font_32.fnt"), false);
-		mediumFont = new BitmapFont(Gdx.files.internal("res/fonts/font_18.fnt"), false);
-		smallFont = new BitmapFont(Gdx.files.internal("res/fonts/font_14.fnt"), false);
-		scoreFont = new BitmapFont(Gdx.files.internal("res/fonts/font_50.fnt"), false);
+		bigFont = new BitmapFont(Gdx.files.internal("fonts/font_32.fnt"), false);
+		mediumFont = new BitmapFont(Gdx.files.internal("fonts/font_18.fnt"), false);
+		smallFont = new BitmapFont(Gdx.files.internal("fonts/font_14.fnt"), false);
+		scoreFont = new BitmapFont(Gdx.files.internal("fonts/font_50.fnt"), false);
 		
 		gameStage = new GameStage(getSpriteBatch());
 		

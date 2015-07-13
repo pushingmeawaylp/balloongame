@@ -38,11 +38,11 @@ public class SettingsPopup extends Container implements IClickListener
 	
 	private void initializeAssets()
 	{
-		bg = new Image(new Texture(Gdx.files.internal("res/images/popupbg_mid.png")));
-		closeButtonImage_h = new Image(new Texture(Gdx.files.internal("res/images/closeButton.png")));
-		closeButtonImage_d = new Image(new Texture(Gdx.files.internal("res/images/closeButton.png")));
-		generic_button_image_h = new Image(new Texture(Gdx.files.internal("res/images/button_generic_brown.png")));
-		generic_button_image_d = new Image(new Texture(Gdx.files.internal("res/images/button_generic_brown_d.png")));
+		bg = new Image(new Texture(Gdx.files.internal("images/popupbg_mid.png")));
+		closeButtonImage_h = new Image(new Texture(Gdx.files.internal("images/closeButton.png")));
+		closeButtonImage_d = new Image(new Texture(Gdx.files.internal("images/closeButton.png")));
+		generic_button_image_h = new Image(new Texture(Gdx.files.internal("images/button_generic_brown.png")));
+		generic_button_image_d = new Image(new Texture(Gdx.files.internal("images/button_generic_brown_d.png")));
 		
 		bigStyle = new LabelStyle(BalloonGame.bigFont, Color.WHITE);
 		mediumStyle = new LabelStyle(BalloonGame.mediumFont, Color.WHITE);

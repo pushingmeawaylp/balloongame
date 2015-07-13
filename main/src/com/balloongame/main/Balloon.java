@@ -40,7 +40,7 @@ public class Balloon extends Container
 
 	public Balloon(BalloonPopup popup)
 	{
-		balloonImg = new Image(new Texture(Gdx.files.internal("res/images/animation/balloon" +
+		balloonImg = new Image(new Texture(Gdx.files.internal("images/animation/balloon" +
 				currentAnimationCount + ".png")));
 		this.setHeight(balloonImg.getHeight());
 		this.setWidth(balloonImg.getWidth());
@@ -191,7 +191,7 @@ public class Balloon extends Container
 		
 		this.removeActor(balloonImg);
 		
-		balloonImg = new Image(new Texture(Gdx.files.internal("res/images/animation/balloon" +
+		balloonImg = new Image(new Texture(Gdx.files.internal("images/animation/balloon" +
 				currentAnimationCount + ".png")));
 		addActor(balloonImg);
 		isAnimationRunning = false;
@@ -213,7 +213,7 @@ public class Balloon extends Container
 			if(animationTimeDuration <= 0)
 			{	
 				this.removeActor(balloonImg);
-				balloonImg = new Image(new Texture(Gdx.files.internal("res/images/animation/balloon" +
+				balloonImg = new Image(new Texture(Gdx.files.internal("images/animation/balloon" +
 						currentAnimationCount++ + ".png")));
 
 				this.addActor(balloonImg);

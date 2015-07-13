@@ -33,7 +33,7 @@ public class GameStage extends Stage
 		mainGroup.setVisible(true);
 		addActor(mainGroup);
 		
-		Image bg = new Image(new Texture(Gdx.files.internal("res/images/main_bg.png")));
+		Image bg = new Image(new Texture(Gdx.files.internal("images/main_bg.png")));
 		this.mainGroup.addActor(bg);
 		
 		balloonPopup = new BalloonPopup(WidgetId.BALLOON_POPUP);

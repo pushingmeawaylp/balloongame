@@ -21,7 +21,7 @@ public class HorizontalBar extends Container
 	
 	public HorizontalBar()
 	{
-		barImg = new Image(new Texture(Gdx.files.internal("res/images/horizontal_bar.png")));
+		barImg = new Image(new Texture(Gdx.files.internal("images/horizontal_bar.png")));
 		this.setHeight(barImg.getHeight());
 		this.setWidth(barImg.getWidth());
 		this.addActor(barImg);

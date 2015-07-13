@@ -63,8 +63,8 @@ public class BalloonPopup extends Container  implements ActionCompleteListener, 
 	
 	private void addSettingsButton()
 	{
-		settingsButtonImage_h = new Image(new Texture(Gdx.files.internal("res/images/settingsButton.png")));
-		settingsButtonImage_d = new Image(new Texture(Gdx.files.internal("res/images/settingsButton.png")));
+		settingsButtonImage_h = new Image(new Texture(Gdx.files.internal("images/settingsButton.png")));
+		settingsButtonImage_d = new Image(new Texture(Gdx.files.internal("images/settingsButton.png")));
 		
 		settingsButton = new Button(settingsButtonImage_h.getDrawable(), 
 									settingsButtonImage_d.getDrawable());
