@@ -71,6 +71,7 @@ public class GameStage extends Stage
 	@Override
 	public void dispose()
 	{
+		SettingsPopup.dispose();
 		settingsPopup = null;
 		super.dispose();
 	}

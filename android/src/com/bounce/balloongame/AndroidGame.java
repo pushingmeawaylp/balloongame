@@ -1,7 +1,5 @@
 package com.bounce.balloongame;
 
-import java.util.HashSet;
-
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

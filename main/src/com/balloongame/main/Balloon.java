@@ -178,7 +178,10 @@ public class Balloon extends Container
 	public void reset()
 	{	
 		coordX = currX = (int) (Config.UI_VIEWPORT_WIDTH/2 - this.getWidth()/2);
-		coordY = currY = 0;
+		if(balloonPopup != null)
+			coordY = currY = balloonPopup.getBar().getHeight();
+		else
+			coordY = currY =  0;
 		
 		startVelocityY = startVelocityX = currentVelocityY = currentVelocityX = timeOfFloat = timeElapsed = 0f;
 		

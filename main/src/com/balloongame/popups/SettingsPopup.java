@@ -3,16 +3,19 @@ package com.balloongame.popups;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.balloongame.handlers.Container;
 import com.balloongame.handlers.WidgetId;
 import com.balloongame.listeners.IClickListener;
 import com.balloongame.listeners.IWidgetId;
 import com.balloongame.main.BalloonGame;
 import com.balloongame.misc.Config.GameConfig;
+import com.balloongame.misc.Utility;
 
 public class SettingsPopup extends Container implements IClickListener
 {
@@ -97,10 +100,13 @@ public class SettingsPopup extends Container implements IClickListener
 	private void initSettingsTiles()
 	{
 		int tileNumber = 0;
+		
+		SettingButtonListener actionListener = new SettingButtonListener();
+		
 		for(GameConfig config : GameConfig.values())
 		{
 			SettingsTile settingstile = new SettingsTile(config,mediumStyle, mediumStyle,
-					WidgetId.getValue(config.name()), this);
+					WidgetId.getValue(config.name()), this, actionListener);
 			
 			mainContainer.addActor(settingstile);	
 			settingstile.setX(0);
@@ -165,12 +171,14 @@ public class SettingsPopup extends Container implements IClickListener
 		WidgetId widgetId;
 		
 		SettingsTile(GameConfig config, LabelStyle nameLabelStyle, LabelStyle diffcultyLabelStyle,
-				WidgetId widgetId, IClickListener listener)
+				WidgetId widgetId, IClickListener listener, ActorGestureListener gestureListener)
 		{
 			this.nameLabel = new Label(config.getName(), nameLabelStyle);
 			this.difficultyLabel = new Label(config.getCurrentValue() + "", diffcultyLabelStyle);
 			this.widgetId = widgetId;
 			this.setListener(this);
+			
+			this.addListener(gestureListener);
 			
 			initSettingTile();
 		}
@@ -193,7 +201,7 @@ public class SettingsPopup extends Container implements IClickListener
 			this.addActor(nameLabel);
 			nameLabel.setX((bg.getWidth() - difficultyButton.getWidth())/2 - nameLabel.getWidth()/2);
 			nameLabel.setY(this.getHeight()/2 - nameLabel.getHeight()/2);
-		}
+		}	
 		
 		@Override
 		public void click(IWidgetId widgetId)
@@ -204,14 +212,17 @@ public class SettingsPopup extends Container implements IClickListener
 			switch((WidgetId)widgetId)
 			{
 			case BALLOON_BASE_SPEED_X:
-				nextValue = ++currentValue;
-				break;
 			case BALLOON_BASE_SPEED_Y:
 			case BALLOON_FLOAT_TIME_DIVIDER:
+				nextValue = ++currentValue;
+				break;
 			case BAR_BASE_SPEED_X:		
 			case E:
 			default:
-				nextValue = currentValue + (config.getMaxValue() - config.getMinValue())/config.getNumSteps();
+				nextValue = Utility.round(
+						currentValue + 
+						(config.getMaxValue() - config.getMinValue())/config.getNumSteps(), 1);
+				
 				break;		
 			}
 			
@@ -222,5 +233,45 @@ public class SettingsPopup extends Container implements IClickListener
 			GameConfig.getValue(widgetId.toString()).setCurrentValue(nextValue);
 			difficultyLabel.setText("" + nextValue);
 		}
+	}
+	
+	private class SettingButtonListener extends ActorGestureListener
+	{
+		private boolean isTouchUpReceived = false;
+		
+//		@Override
+//		public void touchDown(InputEvent event, float x, float y, int pointer,
+//				int button) {
+//			isTouchUpReceived = false;
+//			SettingsTile tile = (SettingsTile) (event.getListenerActor());
+//			updateValues(tile);
+//			super.touchDown(event, x, y, pointer, button);
+//		}
+//		
+//		@Override
+//		public void touchUp(InputEvent event, float x, float y, int pointer,
+//				int button) {
+//			// TODO Auto-generated method stub
+//			super.touchUp(event, x, y, pointer, button);
+//			isTouchUpReceived = true;
+//			super.touchUp(event, x, y, pointer, button);
+//		}
+//		
+//		private void updateValues(final SettingsTile tile)
+//		{
+//			new Thread() {
+//				public void run() {
+//					while(!isTouchUpReceived)
+//					{
+//						tile.click(tile.widgetId);
+//					}
+//				};
+//			}.start();
+//		}
+	}
+	
+	public static void dispose()
+	{
+		settingsPopup = null;
 	}
 }

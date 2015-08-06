@@ -1,15 +1,11 @@
 package com.balloongame.handlers;
 
-import javax.annotation.Resource;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.balloongame.listeners.BaseClickListener;
 import com.balloongame.listeners.IClickListener;
 import com.balloongame.listeners.IWidgetId;
-import com.balloongame.misc.Config;
-import com.balloongame.misc.Utility;
 
 public class Container extends Table implements IClickListener
 {
